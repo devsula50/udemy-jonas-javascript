@@ -16,8 +16,29 @@
 // Data 2
 // 5. Ignore draws this time
 // Test data:
+let scoreDolphins, scoreKoalas
+const calcAverage = (score1, score2, score3) => {
+  return (score1 + score2 + score3) / 3
+}
+const checkWinner = (avgDolphins, avgKoalas) => {
+  if ( avgDolphins > avgKoalas ) {
+    console.log(`Dolphins win (${avgDolphins} vs. ${avgKoalas})`)
+  } else if ( avgDolphins > avgKoalas ) {
+    console.log(`Koalas win (${avgKoalas} vs. ${avgDolphins})`)
+  } else {
+    console.log('No team wins...')
+  }
+}
 // § Data 1: Dolphins score 44, 23 and 71. Koalas score 65, 54 and 49
+scoreDolphins = calcAverage(44, 23, 71)
+scoreKoalas = calcAverage(65, 54, 49)
+checkWinner(scoreDolphins, scoreKoalas)
+
 // § Data 2: Dolphins score 85, 54 and 41. Koalas score 23, 34 and 27
+scoreDolphins = calcAverage(85, 54, 41)
+scoreKoalas = calcAverage(23, 34, 27)
+checkWinner(scoreDolphins, scoreKoalas)
+
 // Hints:
 // § To calculate average of 3 values, add them all together and divide by 3
 // § To check if number A is at least double number B, check for A >= 2 * B.
