@@ -76,72 +76,88 @@ const percentageOfWorld3 = population => {
 // 1. Create an array containing 4 population values of 4 countries of your choice.
 // You may use the values you have been using previously. Store this array into a
 // variable called 'populations'
-
+const populations = [ 1, 2, 3, 4 ]
 
 // 2. Log to the console whether the array has 4 elements or not (true or false)
-
+console.log(populations.length === 4)
 
 // 3. Create an array called 'percentages' containing the percentages of the
 // world population for these 4 population values. Use the function
 // 'percentageOfWorld1' that you created earlier to compute the 4
 // percentage values
-
+const percentages = populations.map(population => percentageOfWorld1(population))
 
 // LECTURE: Basic Array Operations (Methods)
 // 1. Create an array containing all the neighbouring countries of a country of your
 // choice. Choose a country which has at least 2 or 3 neighbours. Store the array
 // into a variable called 'neighbours'
-
+const neighbours = [ 'China', 'Korea', 'Japan' ]
 
 // 2. At some point, a new country called 'Utopia' is created in the neighbourhood of
 // your selected country. So add it to the end of the 'neighbours' array
-
+neighbours.push('Utopia')
 
 // 3. Unfortunately, after some time, the new country is dissolved. So remove it from
 // the end of the array
-
+neighbours.pop()
 
 // 4. If the 'neighbours' array does not include the country ‘Germany’, log to the
 // console: 'Probably not a central European country :D'
-
+if ( neighbours.includes('Germany') )
+  console.log('Probably not a central European country :D')
 
 // 5. Change the name of one of your neighbouring countries. To do that, find the
 // index of the country in the 'neighbours' array, and then use that index to
 // change the array at that index position. For example, you can search for
 // 'Sweden' in the array, and then replace it with 'Republic of Sweden'.
 // The Complete JavaScript Course 16
-
+neighbours[neighbours.indexOf('Korea')] = 'Republic of Korea'
 
 // LECTURE: Introduction to Objects
 // 1. Create an object called 'myCountry' for a country of your choice, containing
 // properties 'country', 'capital', 'language', 'population' and
 // 'neighbours' (an array like we used in previous assignments)
-
+const myCountry = {
+  country: 'US',
+  capital: 'Washington D.C.',
+  language: 'English',
+  population: '333',
+  neighbours: [
+    'Canada',
+    'Mexico',
+    'Russia'
+  ]
+}
 
 // LECTURE: Dot vs. Bracket Notation
 // 1. Using the object from the previous assignment, log a string like this to the
 // console: 'Finland has 6 million finnish-speaking people, 3 neighbouring countries
 // and a capital called Helsinki.'
-
+console.log(`${myCountry.country} has ${myCountry.population} million ${myCountry.language}-speaking people, ${myCountry.neighbours.length} neighbouring countries and a capital called ${myCountry.capital}.`)
 
 // 2. Increase the country's population by two million using dot notation, and then
 // decrease it by two million using brackets notation.
-
+myCountry.population -= 2
+myCountry['populations'] -= 2
 
 // LECTURE: Object Methods
 // 1. Add a method called 'describe' to the 'myCountry' object. This method
 // will log a string to the console, similar to the string logged in the previous
 // assignment, but this time using the 'this' keyword.
-
+myCountry.describe = function() {
+  console.log(`${this.country} has ${this.population} million ${this.language}-speaking people, ${this.neighbours.length} neighbouring countries and a capital called ${this.capital}.`)
+}
 
 // 2. Call the 'describe' method
-
+myCountry.describe()
 
 // 3. Add a method called 'checkIsland' to the 'myCountry' object. This
 // method will set a new property on the object, called 'isIsland'.
 // 'isIsland' will be true if there are no neighbouring countries, and false if
 // there are. Use the ternary operator to set the property.
-
+myCountry['checkIsland'] = () => {
+  return this.isIsland = neighbours.length === 0 ? true : false
+}
 
 // LECTURE: Iteration: The for Loop
 // 1. There are elections in your country! In a small town, there are only 50 voters.
