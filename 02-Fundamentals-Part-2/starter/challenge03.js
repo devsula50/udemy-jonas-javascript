@@ -26,7 +26,7 @@ const john = {
   height: 1.95,
   calcBMI: function() {
     return this.bmi = this.mass / (this.height * this.height)
-  },
+  }
 }
 
 if ( mark.calcBMI() > john.calcBMI() )

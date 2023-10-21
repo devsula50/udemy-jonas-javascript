@@ -12,7 +12,30 @@
 // 316.25”
 
 // Test data:
+let bill, tip
+
+const calcTip = bill => {
+  return bill >= 50 && bill <= 300 ? bill * 0.15 : bill * 0.2
+}
+
+const printResult = (bill) => {
+  tip = calcTip(bill)
+  console.log(`The bill was ${bill}, the tip was ${tip}, and the total value ${bill + tip}`)
+}
+
 // § Data 1: Test for bill values 275, 40 and 430
+bill = 275
+tip = calcTip(bill)
+printResult(bill, tip)
+
+bill = 40
+tip = calcTip(bill)
+printResult(bill, tip)
+
+bill = 430
+tip = calcTip(bill)
+printResult(bill, tip)
+
 // Hints:
 // § To calculate 20% of a value, simply multiply it by 20/100 = 0.2
 // § Value X is between 50 and 300, if it's >= 50 && <= 300

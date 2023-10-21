@@ -71,7 +71,6 @@ const percentageOfWorld3 = population => {
   return Math.round(population / WORLD_POPULATION * 1000) / 10
 }
 
-
 // LECTURE: Introduction to Arrays
 // 1. Create an array containing 4 population values of 4 countries of your choice.
 // You may use the values you have been using previously. Store this array into a
@@ -163,32 +162,44 @@ myCountry['checkIsland'] = () => {
 // 1. There are elections in your country! In a small town, there are only 50 voters.
 // Use a for loop to simulate the 50 people voting, by logging a string like this to
 // the console (for numbers 1 to 50): 'Voter number 1 is currently voting'
-// The Complete JavaScript Course 17
-
+for ( let i = 1; i < 51; i++ ) {
+  console.log(`(for numbers ${i} to 50: 'Voter number ${i} is currently voting`)
+}
 
 // LECTURE: Looping Arrays, Breaking and Continuing
 // 1. Let's bring back the 'populations' array from a previous assignment
-
-
 // 2. Use a for loop to compute an array called 'percentages2' containing the
 // percentages of the world population for the 4 population values. Use the
 // function 'percentageOfWorld1' that you created earlier
-
+const percentages2 = []
+for ( let i = 0; i < populations.length; i++ ) {
+  percentages2.push(percentageOfWorld1(populations[i]))
+}
 
 // 3. Confirm that 'percentages2' contains exactly the same values as the
 // 'percentages' array that we created manually in the previous assignment,
 // and reflect on how much better this solution is
-
+let i = 0
+for ( i = 0; i < percentages.length; i++ ) {
+  if ( percentages[i] !== percentages2[i] ) break
+}
+console.log(i === percentages.length)
 
 // LECTURE: Looping Backwards and Loops in Loops
 // 1. Store this array of arrays into a variable called 'listOfNeighbours'
 // [['Canada', 'Mexico'], ['Spain'], ['Norway', 'Sweden',
 // 'Russia']];
-
+const listOfNeighbours = [ [ 'Canada', 'Mexico' ], [ 'Spain' ], [ 'Norway', 'Sweden', 'Russia' ] ]
 
 // 2. Log only the neighbouring countries to the console, one by one, not the entire
 // arrays. Log a string like 'Neighbour: Canada' for each country
-
+for ( let i = 0; i < listOfNeighbours.length; i++ )
+  for ( let j = 0; j < listOfNeighbours[i].length; j++ ) {
+    for ( let k = 0; k < listOfNeighbours[i].length; k++ ) {
+      if ( j === k ) continue
+      console.log(`Neighbor: ${listOfNeighbours[i][k]}`)
+    }
+  }
 
 // 3. You will need a loop inside a loop for this. This is actually a bit tricky, so don't
 // worry if it's too difficult for you! But you can still try to figure this out anyway
@@ -197,7 +208,12 @@ myCountry['checkIsland'] = () => {
 // LECTURE: The while Loop
 // 1. Recreate the challenge from the lecture 'Looping Arrays, Breaking and Continuing',
 // but this time using a while loop (call the array 'percentages3')
-
+const percentages3 = []
+i = 0
+while ( i < populations.length ) {
+  percentages3.push(percentageOfWorld1(populations[i]))
+  i++
+}
 
 // 2. Reflect on what solution you like better for this task: the for loop or the while
 // loop?
