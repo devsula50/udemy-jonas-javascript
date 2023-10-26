@@ -62,8 +62,13 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 /* first touch DOM */
-const displayMovements = function (movements) {
+const displayMovements = function (account, sortFn = null) {
   containerMovements.innerHTML = '';
+  if (!account) return;
+
+  const movements = sortFn
+    ? account.movements.slice().sort(sortFn)
+    : account.movements;
 
   movements.forEach((mov, i) => {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
@@ -93,13 +98,25 @@ const createUsernames = accounts => {
 };
 
 /* reduce */
-const calcDisplayBalance = movements => {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance} EUR`;
+const calcDisplayBalance = account => {
+  if (!account) {
+    labelBalance.textContent = '';
+    return;
+  }
+
+  account.balance = account.movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${account.balance} EUR`;
 };
 
 /* chaining methods */
 const calcDisplaySummary = account => {
+  if (!account) {
+    labelSumIn.textContent = '';
+    labelSumOut.textContent = '';
+    labelSumInterest.textContent = '';
+    return;
+  }
+
   const incomes = account.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov);
@@ -115,6 +132,19 @@ const calcDisplaySummary = account => {
   labelSumIn.textContent = `${incomes} €`;
   labelSumOut.textContent = `${Math.abs(outcomes)} €`;
   labelSumInterest.textContent = `${interest} €`;
+};
+
+const clearInputFields = (...args) => {
+  args.forEach(arg => (arg.value = ''));
+  args[args.length - 1].blur();
+};
+
+const updateUI = account => {
+  containerApp.style.opacity = account ? 100 : 0;
+
+  displayMovements(account);
+  calcDisplayBalance(account);
+  calcDisplaySummary(account);
 };
 
 createUsernames(accounts);
@@ -133,15 +163,73 @@ btnLogin.addEventListener('click', e => {
     labelWelcome.textContent = `Welcome back, ${
       currentAccount.owner.split(' ')[0]
     }`;
-    containerApp.style.opacity = 100;
 
-    inputLoginUsername.value = inputLoginPin.value = '';
-    inputLoginPin.blur();
-
-    displayMovements(currentAccount.movements);
-    calcDisplayBalance(currentAccount.movements);
-    calcDisplaySummary(currentAccount);
+    updateUI(currentAccount);
+    clearInputFields(inputLoginUsername, inputLoginPin);
   }
+});
+
+btnTransfer.addEventListener('click', e => {
+  e.preventDefault();
+  const receiverUsername = inputTransferTo.value;
+  const amount = Number(inputTransferAmount.value);
+  if (
+    amount <= 0 ||
+    currentAccount.balance < amount ||
+    receiverUsername === currentAccount.username
+  )
+    return;
+
+  const recvAcc = accounts.find(
+    account => account.username === receiverUsername,
+  );
+
+  if (recvAcc) {
+    currentAccount.movements.push(-amount);
+    recvAcc.movements.push(amount);
+  }
+
+  updateUI(currentAccount);
+  clearInputFields(inputTransferTo, inputTransferAmount);
+});
+
+btnLoan.addEventListener('click', e => {
+  e.preventDefault();
+  const amount = Number(inputLoanAmount.value);
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    currentAccount.movements.push();
+    updateUI(currentAccount);
+  }
+});
+
+btnClose.addEventListener('click', e => {
+  e.preventDefault();
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const currentAccountIndex = accounts.findIndex(
+      account => account.username === currentAccount.username,
+    );
+    accounts.splice(currentAccountIndex, 1);
+    currentAccount = undefined;
+
+    updateUI(currentAccount);
+    clearInputFields(inputCloseUsername, inputClosePin);
+  }
+});
+
+const sortTool = [
+  { sortFn: null, textContent: '⬇️ SORT' },
+  { sortFn: (a, b) => b - a, textContent: '⬆️ SORT' },
+  { sortFn: (a, b) => a - b, textContent: 'Clear SORT' },
+];
+let sortedToken = 0;
+btnSort.addEventListener('click', e => {
+  e.preventDefault();
+  sortedToken = (sortedToken + 1) % sortTool.length;
+  displayMovements(currentAccount, sortTool[sortedToken].sortFn);
+  btnSort.textContent = sortTool[sortedToken].textContent;
 });
 
 /////////////////////////////////////////////////
@@ -185,3 +273,14 @@ const totalDepositsUSD = movements
 /* find method */
 let firstWithdrawal = movements.find(mov => mov < 0);
 let account = accounts.find(acc => acc.owner === 'Jessica Davis');
+
+/* flat */
+const overallBalance = accounts
+  .flatMap(account => account.movements)
+  .reduce((acc, cur) => acc + cur);
+
+/* Array.from */
+labelBalance.addEventListener('click', () => {
+  const movs = [...document.querySelectorAll('.movements__value')];
+  console.log(movs);
+});
